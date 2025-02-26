@@ -26,7 +26,7 @@ class Memcached implements Handler
      * @param string $id Session ID, defaults to `session_id()`.
      * @return string
      */
-    private function getKey(string $id = null) : string
+    private function getKey(?string $id = null) : string
     {
         $id = $id ?: session_id();
         return sprintf('%s/session/%s', session_name(), $id);
