@@ -55,7 +55,7 @@ class Session implements SessionHandlerInterface
      * @param array $args The arguments to pass to $method.
      * @return mixed Whatever $method returned.
      */
-    private function walk(string $method, int $highProbability = null, array $args = [])
+    private function walk(string $method, ?int $highProbability = null, array $args = [])
     {
         $result = false;
         foreach ($this->handlers as $data) {
