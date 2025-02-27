@@ -37,8 +37,8 @@ interface Handler
      * seconds.
      *
      * @param int $maxlifetime
-     * @return bool True on success, else false.
+     * @return int|false Number of deleted sessions, or false on failure.
      */
-    public function gc(int $maxlifetime) : bool;
+    public function gc(int $maxlifetime) : int|false;
 }
 
