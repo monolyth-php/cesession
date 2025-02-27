@@ -115,13 +115,13 @@ class Pdo implements Handler
     }
     
     /**
-     * Run garbase collection.
+     * Run garbage collection.
      *
      * @param int $maxlifetime Maximum number of seconds a session may be
      *  inactive before it is eligible for garabage collection.
-     * @return bool True if anything was removed, else false.
+     * @return int|false The number of deleted rows, or false on failure.
      */
-    public function gc(int $maxlifetime) : bool
+    public function gc(int $maxlifetime) : int|false
     {
         static $stmt;
         if (!isset($stmt)) {
@@ -130,7 +130,7 @@ class Pdo implements Handler
             );
         }
         $stmt->execute([date('Y-m-d H:i:s', strtotime("-$maxlifetime second"))]);
-        return ($affectedRows = $stmt->rowCount()) && $affectedRows;
+        return ($affectedRows = $stmt->rowCount()) ? $affectedRows : false;
     }
 }
 
