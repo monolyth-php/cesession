@@ -15,8 +15,8 @@ return function () : Generator {
      * row. After reopening, a session value should be persisted.
      */
     yield function () use ($pdo, $sessions) {
-        $session = Wrapper::createObject(Session::class, 'testing');
-        $session->registerHandler(Wrapper::createObject(Handler\Pdo::class, $pdo));
+        $session = new Wrapper(new Session('testing'));
+        $session->registerHandler(new Handler\Pdo($pdo));
         $session->open('', 'testing');
         $session->read('testing');
         $_SESSION['foo'] = 'bar';
@@ -34,11 +34,11 @@ return function () : Generator {
 
     /** Using memcache, a session should also be "persisted". */
     yield function () use ($sessions) {
-        $session = Wrapper::createObject(Session::class, 'testing');
+        $session = new Wrapper(new Session('testing'));
         $memcached = new Memcached;
         $memcached->addServer('127.0.0.1', 11211);
         $memcached->flush();
-        $session->registerHandler(Wrapper::createObject(Handler\Memcached::class, $memcached));
+        $session->registerHandler(new Handler\Memcached($memcached));
         $session->open('', 'testing');
         $session->read('testing');
         $_SESSION['foo'] = 'bar';
@@ -47,6 +47,7 @@ return function () : Generator {
         $sessions->execute();
         $_SESSION = [];
         $session->open('', 'testing');
+        var_dump($session->read('testing'));
         $_SESSION = unserialize($session->read('testing'));
         assert($_SESSION['foo'] == 'bar');
         $session->close();
@@ -57,12 +58,12 @@ return function () : Generator {
      * forcing a write, it should be stored throuh the database fallback handler.
      */
     yield function () use ($pdo, $sessions) {
-        $session = Wrapper::createObject(Session::class, 'testing');
+        $session = new Wrapper(new Session('testing'));
         $memcached = new Memcached;
         $memcached->addServer('127.0.0.1', 11211);
         $memcached->flush();
-        $session->registerHandler(Wrapper::createObject(Handler\Memcached::class, $memcached), 10);
-        $session->registerHandler(Wrapper::createObject(Handler\Pdo::class, $pdo));
+        $session->registerHandler(new Handler\Memcached($memcached), 10);
+        $session->registerHandler(new Handler\Pdo($pdo));
         $session->open('', 'testing');
         $session->read('testing');
         $_SESSION['foo'] = 'bar';
