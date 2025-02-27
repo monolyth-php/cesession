@@ -78,12 +78,13 @@ class Memcached implements Handler
      * actually just a stub.
      *
      * @param int $maxlifetime
-     * @return bool Always returns true.
+     * @return int|false The number of deleted sessions, always 0 for this
+     *  handler.
      */
-    public function gc(int $maxlifetime) : bool
+    public function gc(int $maxlifetime) : int|false
     {
         // Handled automatically by Memcached.
-        return true;
+        return 0;
     }
 }
 
