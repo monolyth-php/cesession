@@ -1,6 +1,7 @@
 {
     "name": "monolyth/cesession",
     "description": "Alternative PHP session handler for Monolyth unframework",
+    "type": "library",
     "license": "MIT",
     "keywords": ["monolyth","php","session","handler"],
     "authors": [
