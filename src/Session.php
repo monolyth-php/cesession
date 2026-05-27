@@ -3,11 +3,12 @@
 namespace Monolyth\Cesession;
 
 use SessionHandlerInterface;
+use SessionUpdateTimestampHandlerInterface;
 
 /**
  * Main Session interface. Should only be defined once per page load.
  */
-class Session implements SessionHandlerInterface
+class Session implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
 {
     /** @var array */
     public static $session = [];
@@ -181,6 +182,16 @@ class Session implements SessionHandlerInterface
     public function force(string $method, array $args = [])
     {
         return $this->walk($method, 100, $args);
+    }
+
+    public function validateId(string $id) : bool
+    {
+        return $this->walk('validateId', null, [$id]);
+    }
+
+    public function updateTimestamp(string $id, string $data) : bool
+    {
+        return $this->walk('updateTimestamp', null, [$id, $data]);
     }
 }
 
