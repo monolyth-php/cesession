@@ -132,5 +132,25 @@ class Pdo implements Handler
         $stmt->execute([date('Y-m-d H:i:s', strtotime("-$maxlifetime second"))]);
         return ($affectedRows = $stmt->rowCount()) ? $affectedRows : false;
     }
+
+    public function validateId(string $id) : bool
+    {
+        static $stmt;
+        if (!isset($stmt)) {
+            $stmt = $this->pdo->prepare("SELECT 1 FROM cesession_session WHERE id = ?");
+        }
+        $stmt->execute([$id]);
+        return (bool)$stmt->fetchColumn();
+    }
+
+    public function updateTimestamp(string $id, string $data) : bool
+    {
+        static $stmt;
+        if (!isset($stmt)) {
+            $stmt = $this->pdo->prepare("UPDATE cesession_session SET id = id WHERE id = ?");
+        }
+        $stmt->execute([$id]);
+        return true;
+    }
 }
 
