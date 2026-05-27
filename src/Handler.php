@@ -40,5 +40,9 @@ interface Handler
      * @return int|false Number of deleted sessions, or false on failure.
      */
     public function gc(int $maxlifetime) : int|false;
+
+    public function validateId(string $id) : bool;
+
+    public function updateTimestamp(string $id, string $data) : bool;
 }
 
