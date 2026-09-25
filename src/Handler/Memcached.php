@@ -94,11 +94,9 @@ class Memcached implements Handler
 
     public function updateTimestamp(string $id, string $data) : bool
     {
-        $values = $data + compact('id'); // Default.
-        $values['dateactive'] = date('Y-m-d H:i:s');
         return $this->mc->replace(
             $this->getKey($id),
-            json_encode($values),
+            $data,
             ini_get('session.gc_maxlifetime')
         );
     }
