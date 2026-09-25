@@ -86,5 +86,21 @@ class Memcached implements Handler
         // Handled automatically by Memcached.
         return 0;
     }
+
+    public function validateId(string $id) : bool
+    {
+        return (bool)$this->read($id);
+    }
+
+    public function updateTimestamp(string $id, string $data) : bool
+    {
+        $values = $data + compact('id'); // Default.
+        $values['dateactive'] = date('Y-m-d H:i:s');
+        return $this->mc->replace(
+            $this->getKey($id),
+            json_encode($values),
+            ini_get('session.gc_maxlifetime')
+        );
+    }
 }
 
